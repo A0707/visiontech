@@ -17,6 +17,7 @@ const NAV_LINKS = [
   { href: "/portfolio", label: "Réalisations" },
   { href: "/maintenance", label: "Maintenance" },
   { href: "/a-propos", label: "À propos" },
+  { href: "/carrieres", label: "Carrières" },
   { href: "/contact", label: "Contact" },
 ];
 

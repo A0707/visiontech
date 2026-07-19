@@ -1,0 +1,39 @@
+LOGOS PARTENAIRES — MODE D'EMPLOI
+=================================
+
+Ce dossier est prevu pour recevoir les logos officiels des constructeurs et
+editeurs dont VisionTech est partenaire ou revendeur agree.
+
+IMPORTANT — avant de deposer un fichier ici
+-------------------------------------------
+Les logos Microsoft, Cisco, Fortinet, VMware, Dell, HP, Lenovo et Synology sont
+des marques deposees. Les afficher sur un site commercial sans autorisation
+expose a une mise en demeure, et laisse croire au visiteur a un partenariat
+qui n'existe pas.
+
+N'ajoutez un logo que si :
+  1. VisionTech a un accord de partenariat / revendeur effectif avec la marque,
+  2. le fichier provient du kit de marque officiel de l'editeur,
+  3. vous respectez ses regles d'usage (zone de protection, couleurs, taille min).
+
+Ou obtenir les kits officiels
+-----------------------------
+  Microsoft  -> partner.microsoft.com  (badge "Solutions Partner")
+  Cisco      -> cisco.com/go/partnerbranding
+  Fortinet   -> fortinet.com/partners  (Engage Partner Program)
+  VMware     -> partnerconnect.vmware.com
+  Dell       -> dell.com/partner
+  HP         -> partner.hp.com
+  Lenovo     -> partnerhub.lenovo.com
+  Synology   -> partner.synology.com
+
+Comment activer un logo
+-----------------------
+  1. Deposer le fichier ici, par ex. public/brand/partners/fortinet.svg
+     (SVG de preference, sinon PNG fond transparent, hauteur >= 64 px)
+  2. Ouvrir lib/partners.ts
+  3. Renseigner le champ logo :
+       { name: "Fortinet", logo: "/brand/partners/fortinet.svg" },
+
+Tant que le champ logo est vide, le composant affiche le nom en texte :
+le site reste fonctionnel et sans risque juridique.
