@@ -8,6 +8,7 @@ import { Menu, X, ShoppingCart, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { GlobalSearch } from "@/components/global-search";
 import { useCartCount, useCartStore } from "@/lib/store";
 
 const NAV_LINKS = [
@@ -107,6 +108,8 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <GlobalSearch />
+
           {mounted && (
             <button
               aria-label="Basculer le thème"

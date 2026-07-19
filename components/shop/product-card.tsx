@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Star, ShoppingCart, Server, Router, Shield, Laptop, Cloud, Wifi, BatteryCharging, HardDrive, Lock } from "lucide-react";
+import { Star, ShoppingCart, Scale, Server, Router, Shield, Laptop, Cloud, Wifi, BatteryCharging, HardDrive, Lock } from "lucide-react";
 import type { Product } from "@/lib/products";
 import { discountPercent, isPromo, STOCK_LABELS } from "@/lib/products";
 import { formatMAD, cn } from "@/lib/utils";
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import { useCartStore } from "@/lib/store";
+import { useCompareStore, MAX_COMPARE } from "@/lib/compare-store";
 import type { VariantProps } from "class-variance-authority";
 
 const ICONS: Record<string, typeof Server> = {
@@ -46,9 +47,14 @@ const STOCK_TEXT: Record<Product["stock"], string> = {
 
 export function ProductCard({ product }: { product: Product }) {
   const addItem = useCartStore((s) => s.addItem);
+  const compareItems = useCompareStore((s) => s.items);
+  const toggleCompare = useCompareStore((s) => s.toggle);
   const Icon = ICONS[product.image] ?? Server;
   const promo = isPromo(product);
   const discount = discountPercent(product);
+
+  const inCompare = compareItems.some((p) => p.id === product.id);
+  const compareFull = compareItems.length >= MAX_COMPARE && !inCompare;
 
   return (
     <div className="glass-card group flex h-full flex-col overflow-hidden p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10 hover:ring-1 hover:ring-electric-500/30 dark:hover:shadow-black/30">
@@ -99,13 +105,39 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
 
-        <button
-          onClick={() => addItem(product)}
-          className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-full bg-electric-500 text-sm font-semibold text-white transition-all hover:bg-electric-600 hover:shadow-glow active:scale-[0.98]"
-        >
-          <ShoppingCart className="h-4 w-4" />
-          Ajouter au panier
-        </button>
+        <div className="mt-4 flex gap-2">
+          <button
+            onClick={() => addItem(product)}
+            className="flex h-10 flex-1 items-center justify-center gap-2 rounded-full bg-electric-500 text-sm font-semibold text-white transition-all hover:bg-electric-600 hover:shadow-glow active:scale-[0.98]"
+          >
+            <ShoppingCart className="h-4 w-4" />
+            Ajouter au panier
+          </button>
+          <button
+            onClick={() => toggleCompare(product)}
+            disabled={compareFull}
+            aria-pressed={inCompare}
+            title={
+              compareFull
+                ? `Maximum ${MAX_COMPARE} produits comparés`
+                : inCompare
+                  ? "Retirer du comparateur"
+                  : "Ajouter au comparateur"
+            }
+            className={cn(
+              "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-colors",
+              inCompare
+                ? "border-electric-500/40 bg-electric-500/15 text-electric-600 dark:text-electric-400"
+                : "text-slate-500 hover:border-slate-900/25 hover:text-night-900 dark:text-slate dark:hover:border-white/25 dark:hover:text-white",
+              compareFull && "cursor-not-allowed opacity-40"
+            )}
+          >
+            <Scale className="h-4 w-4" />
+            <span className="sr-only">
+              {inCompare ? "Retirer du comparateur" : "Ajouter au comparateur"}
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );

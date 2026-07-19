@@ -16,8 +16,10 @@ const footerLinks = [
   {
     title: "Ressources",
     links: [
-      { label: "Portfolio", href: "/portfolio" },
+      { label: "Réalisations", href: "/portfolio" },
       { label: "Blog", href: "/blog" },
+      { label: "Estimation de budget", href: "/devis" },
+      { label: "Téléchargements", href: "/downloads" },
       { label: "FAQ", href: "/#faq" },
       { label: "Carrières", href: "/carrieres" },
     ],

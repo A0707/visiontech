@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { products } from "@/lib/products";
 import { Reveal } from "@/components/motion/reveal";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { ProductDetail } from "@/components/shop/product-detail";
 import { ProductCard } from "@/components/shop/product-card";
 
@@ -76,9 +77,16 @@ export default async function ProductPage({
       />
       <div className="container">
         <Reveal>
+          <Breadcrumb
+            items={[
+              { label: "Accueil", href: "/" },
+              { label: "Boutique", href: "/boutique" },
+              { label: product.name },
+            ]}
+          />
           <Link
             href="/boutique"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-electric-600 hover:text-electric-500 dark:text-electric-400 dark:hover:text-electric-300"
+            className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-electric-600 hover:text-electric-500 dark:text-electric-400 dark:hover:text-electric-300"
           >
             <ArrowLeft className="h-4 w-4" />
             Retour à la boutique

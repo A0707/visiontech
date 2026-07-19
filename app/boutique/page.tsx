@@ -14,6 +14,7 @@ import {
 } from "@/lib/products";
 import { ProductCard } from "@/components/shop/product-card";
 import { FeaturedProductCard } from "@/components/shop/featured-product-card";
+import { CompareBar } from "@/components/shop/compare-bar";
 import { PriceRangeFilter } from "@/components/shop/price-range-filter";
 import { Reveal } from "@/components/motion/reveal";
 import { Input } from "@/components/ui/input";
@@ -231,14 +232,18 @@ export default function BoutiquePage() {
                 <h3 className="mb-3 text-sm font-semibold text-night-900 dark:text-white">Disponibilité</h3>
                 <ul className="space-y-2">
                   {STOCK_OPTIONS.map((status) => (
-                    <li key={status}>
-                      <label className="flex cursor-pointer items-center gap-2.5 text-sm text-slate-700 dark:text-slate-300">
-                        <input
-                          type="checkbox"
-                          checked={availability.includes(status)}
-                          onChange={() => toggleAvailability(status)}
-                          className="h-4 w-4 rounded accent-electric-500"
-                        />
+                    <li key={status} className="flex items-center gap-2.5">
+                      <input
+                        id={`stock-${status}`}
+                        type="checkbox"
+                        checked={availability.includes(status)}
+                        onChange={() => toggleAvailability(status)}
+                        className="h-4 w-4 cursor-pointer rounded accent-electric-500"
+                      />
+                      <label
+                        htmlFor={`stock-${status}`}
+                        className="cursor-pointer text-sm text-slate-700 dark:text-slate-300"
+                      >
                         {STOCK_LABELS[status]}
                       </label>
                     </li>
@@ -247,15 +252,21 @@ export default function BoutiquePage() {
               </div>
 
               <div className="mt-6 border-t pt-5">
-                <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+                <div className="flex items-center gap-2.5">
                   <input
+                    id="promo-only"
                     type="checkbox"
                     checked={promoOnly}
                     onChange={(e) => setPromoOnly(e.target.checked)}
-                    className="h-4 w-4 rounded accent-red-500"
+                    className="h-4 w-4 cursor-pointer rounded accent-red-500"
                   />
-                  En promotion uniquement
-                </label>
+                  <label
+                    htmlFor="promo-only"
+                    className="cursor-pointer text-sm font-medium text-slate-700 dark:text-slate-300"
+                  >
+                    En promotion uniquement
+                  </label>
+                </div>
               </div>
 
               {filtersActive && (
@@ -353,6 +364,8 @@ export default function BoutiquePage() {
           </div>
         </div>
       </div>
+
+      <CompareBar />
     </div>
   );
 }

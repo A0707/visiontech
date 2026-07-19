@@ -24,6 +24,10 @@ export interface ProductSpec {
 export interface Product {
   id: string;
   name: string;
+  /** Marque du matériel — les visiteurs cherchent souvent par constructeur. */
+  brand?: string;
+  /** Synonymes de recherche (français/anglais, abréviations métier). */
+  searchTerms?: string[];
   category: ProductCategory;
   price: number;
   oldPrice?: number;
@@ -49,6 +53,8 @@ export const products: Product[] = [
   {
     id: "fw-3000",
     name: "Pare-feu VisionShield FW-3000",
+    brand: "Fortinet",
+    searchTerms: ["firewall","pare feu","ngfw","utm","fortigate","vpn"],
     category: "Sécurité",
     price: 18500,
     oldPrice: 21900,
@@ -73,6 +79,8 @@ export const products: Product[] = [
   {
     id: "srv-r740",
     name: "Serveur Rack VT PowerEdge R740",
+    brand: "Dell",
+    searchTerms: ["serveur","server","rack","poweredge","xeon","virtualisation"],
     category: "Serveurs",
     price: 64900,
     rating: 4.9,
@@ -95,6 +103,8 @@ export const products: Product[] = [
   {
     id: "sw-24p",
     name: "Switch Manageable 24 ports PoE+",
+    brand: "Cisco",
+    searchTerms: ["switch","commutateur","poe","reseau","network","vlan"],
     category: "Réseau",
     price: 6200,
     oldPrice: 7400,
@@ -118,6 +128,8 @@ export const products: Product[] = [
   {
     id: "ap-wifi6",
     name: "Point d'accès Wi-Fi 6 Enterprise",
+    brand: "Cisco",
+    searchTerms: ["wifi","wi-fi","wireless","borne","point acces","access point","ax"],
     category: "Réseau",
     price: 3400,
     rating: 4.7,
@@ -140,6 +152,8 @@ export const products: Product[] = [
   {
     id: "nas-8bay",
     name: "NAS Professionnel 8 baies 32To",
+    brand: "Synology",
+    searchTerms: ["nas","stockage","storage","raid","sauvegarde","backup"],
     category: "Serveurs",
     price: 22800,
     rating: 4.8,
@@ -162,6 +176,8 @@ export const products: Product[] = [
   {
     id: "edr-license",
     name: "Licence EDR Endpoint Protection (50 postes)",
+    brand: "Fortinet",
+    searchTerms: ["edr","xdr","antivirus","endpoint","licence","securite"],
     category: "Cloud & Licences",
     price: 12500,
     rating: 4.9,
@@ -184,6 +200,8 @@ export const products: Product[] = [
   {
     id: "ups-3kva",
     name: "Onduleur Rack 3000VA/2700W",
+    brand: "APC",
+    searchTerms: ["onduleur","ups","alimentation","secours","electrique"],
     category: "Serveurs",
     price: 9800,
     rating: 4.5,
@@ -205,6 +223,8 @@ export const products: Product[] = [
   {
     id: "laptop-pro14",
     name: "Poste de travail Pro 14\" i7 32Go",
+    brand: "HP",
+    searchTerms: ["laptop","portable","ordinateur","pc","ultrabook","poste"],
     category: "Postes de travail",
     price: 15900,
     oldPrice: 17500,
@@ -228,6 +248,8 @@ export const products: Product[] = [
   {
     id: "backup-cloud",
     name: "Sauvegarde Cloud VisionVault (1To)",
+    brand: "VisionTech",
+    searchTerms: ["sauvegarde","backup","cloud","pra","restauration"],
     category: "Cloud & Licences",
     price: 2400,
     rating: 4.6,
@@ -249,6 +271,8 @@ export const products: Product[] = [
   {
     id: "vpn-appliance",
     name: "Appliance VPN SD-WAN VT-Connect",
+    brand: "Fortinet",
+    searchTerms: ["vpn","sdwan","sd-wan","multi-site","interconnexion"],
     category: "Sécurité",
     price: 27500,
     rating: 4.8,
@@ -271,6 +295,8 @@ export const products: Product[] = [
   {
     id: "sw-48p",
     name: "Switch Core 48 ports 10G SFP+",
+    brand: "Cisco",
+    searchTerms: ["switch","commutateur","coeur","core","10g","sfp","datacenter"],
     category: "Réseau",
     price: 34900,
     rating: 4.9,
@@ -292,6 +318,8 @@ export const products: Product[] = [
   {
     id: "mon-siem",
     name: "Supervision SIEM VisionWatch (annuel)",
+    brand: "VisionTech",
+    searchTerms: ["siem","soc","supervision","monitoring","logs","alerting"],
     category: "Cloud & Licences",
     price: 45000,
     rating: 5,

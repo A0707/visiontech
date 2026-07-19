@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { blogPosts, getBlogPost } from "@/lib/blog";
 import { Reveal } from "@/components/motion/reveal";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { CtaSection } from "@/components/sections/cta-section";
 
 export function generateStaticParams() {
@@ -69,9 +70,16 @@ export default async function BlogPostPage({
       />
       <div className="container max-w-3xl">
         <Reveal>
+          <Breadcrumb
+            items={[
+              { label: "Accueil", href: "/" },
+              { label: "Blog", href: "/blog" },
+              { label: post.title },
+            ]}
+          />
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-electric-600 hover:text-electric-500 dark:text-electric-400 dark:hover:text-electric-300"
+            className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-electric-600 hover:text-electric-500 dark:text-electric-400 dark:hover:text-electric-300"
           >
             <ArrowLeft className="h-4 w-4" />
             Retour au blog

@@ -155,22 +155,25 @@ export function ProductDetail({ product }: { product: Product }) {
 
           <p className="mt-6 leading-relaxed text-slate-600 dark:text-slate-300">{product.description}</p>
 
+          {/* input et label frères (htmlFor) : imbriquer l'input dans le label
+              fait suivre le clic deux fois et annule le basculement. */}
           {installationPrice > 0 && (
-            <label
+            <div
               className={cn(
-                "mt-6 flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors",
+                "mt-6 flex items-start gap-3 rounded-xl border p-4 transition-colors",
                 withInstallation
                   ? "border-electric-500/40 bg-electric-500/[0.06]"
                   : "border-slate-900/10 hover:border-slate-900/20 dark:border-white/10 dark:hover:border-white/20"
               )}
             >
               <input
+                id="with-installation"
                 type="checkbox"
                 checked={withInstallation}
                 onChange={(e) => setWithInstallation(e.target.checked)}
-                className="mt-0.5 h-4 w-4 shrink-0 rounded accent-electric-500"
+                className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded accent-electric-500"
               />
-              <span className="flex-1">
+              <label htmlFor="with-installation" className="flex-1 cursor-pointer">
                 <span className="flex items-center gap-2 text-sm font-semibold text-night-900 dark:text-white">
                   <Wrench className="h-4 w-4 text-electric-600 dark:text-electric-400" />
                   Installation &amp; configuration par VisionTech
@@ -180,11 +183,11 @@ export function ProductDetail({ product }: { product: Product }) {
                   paramétrage, intégration à votre infrastructure et transfert de
                   compétences à vos équipes.
                 </span>
-              </span>
+              </label>
               <span className="shrink-0 text-sm font-bold text-electric-600 dark:text-electric-400">
                 +{formatMAD(installationPrice)}
               </span>
-            </label>
+            </div>
           )}
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
