@@ -67,6 +67,28 @@ export const viewport: Viewport = {
   themeColor: "#0F172A",
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "VisionTech — CUSTOM IT",
+  url: SITE_URL,
+  logo: `${SITE_URL}/brand/icone-sombre.svg`,
+  description:
+    "Intégrateur IT à Casablanca spécialisé en infrastructure, cloud et cybersécurité pour les entreprises marocaines.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Casablanca",
+    addressCountry: "MA",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+212-6-00-00-00-00",
+    contactType: "customer service",
+    areaServed: "MA",
+    availableLanguage: ["fr"],
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -75,6 +97,10 @@ export default function RootLayout({
   return (
     <html lang="fr" className={manrope.variable} suppressHydrationWarning>
       <body className="min-h-screen font-sans antialiased selection:bg-electric-500/30">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

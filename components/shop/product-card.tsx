@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Star, ShoppingCart, Server, Router, Shield, Laptop, Cloud, Wifi, BatteryCharging, HardDrive, Lock } from "lucide-react";
 import type { Product } from "@/lib/products";
 import { discountPercent, isPromo, STOCK_LABELS } from "@/lib/products";
@@ -51,7 +52,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="glass-card group flex h-full flex-col overflow-hidden p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10 hover:ring-1 hover:ring-electric-500/30 dark:hover:shadow-black/30">
-      <div className="relative flex h-40 items-center justify-center rounded-xl bg-gradient-to-br from-electric-500/10 via-slate-900/[0.02] to-cyan-500/10 dark:via-white/[0.02]">
+      <Link href={`/boutique/${product.id}`} className="relative flex h-40 items-center justify-center rounded-xl bg-gradient-to-br from-electric-500/10 via-slate-900/[0.02] to-cyan-500/10 dark:via-white/[0.02]">
         <Icon className="h-14 w-14 text-electric-500/80 transition-transform duration-500 group-hover:scale-110 dark:text-electric-400/80" strokeWidth={1.4} />
         {promo ? (
           <Badge variant="solid-success" className="absolute left-3 top-3">
@@ -64,13 +65,15 @@ export function ProductCard({ product }: { product: Product }) {
             </Badge>
           )
         )}
-      </div>
+      </Link>
 
       <div className="flex flex-1 flex-col pt-4">
         <span className="text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-slate">
           {product.category}
         </span>
-        <h3 className="mt-1 text-sm font-semibold leading-snug text-night-900 dark:text-white">{product.name}</h3>
+        <Link href={`/boutique/${product.id}`}>
+          <h3 className="mt-1 text-sm font-semibold leading-snug text-night-900 hover:text-electric-600 dark:text-white dark:hover:text-electric-400">{product.name}</h3>
+        </Link>
 
         <div className="mt-2 flex items-center gap-1">
           <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />

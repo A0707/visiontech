@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { href: "/services", label: "Services" },
   { href: "/boutique", label: "Boutique" },
   { href: "/maintenance", label: "Maintenance" },
+  { href: "/a-propos", label: "À propos" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -76,7 +77,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-1 lg:flex">
           {NAV_LINKS.map((link) => {
             const active = pathname === link.href;
             return (
@@ -129,14 +130,14 @@ export function Navbar() {
 
           <Link
             href="/contact"
-            className={cn(buttonVariants({ variant: "primary", size: "sm" }), "hidden md:inline-flex")}
+            className={cn(buttonVariants({ variant: "primary", size: "sm" }), "hidden lg:inline-flex")}
           >
             Demander un devis
           </Link>
 
           <button
             aria-label="Menu"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-night-900 dark:text-white md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-night-900 dark:text-white lg:hidden"
             onClick={() => setMobileOpen((v) => !v)}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -151,7 +152,7 @@ export function Navbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden border-t bg-white/95 dark:bg-night-900/95 backdrop-blur-xl md:hidden"
+            className="overflow-hidden border-t bg-white/95 dark:bg-night-900/95 backdrop-blur-xl lg:hidden"
           >
             <div className="container flex flex-col gap-1 py-4">
               {NAV_LINKS.map((link) => (

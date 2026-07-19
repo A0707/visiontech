@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail, Linkedin, Facebook, Instagram } from "lucide-react";
+import { NewsletterForm } from "@/components/newsletter-form";
 
 const footerLinks = [
   {
@@ -9,23 +10,24 @@ const footerLinks = [
       { label: "Services", href: "/services" },
       { label: "Boutique", href: "/boutique" },
       { label: "Maintenance", href: "/maintenance" },
+      { label: "À propos", href: "/a-propos" },
     ],
   },
   {
-    title: "Services",
+    title: "Ressources",
     links: [
-      { label: "Infrastructure IT", href: "/services#infrastructure" },
-      { label: "Cloud & Virtualisation", href: "/services#cloud" },
-      { label: "Cybersécurité", href: "/services#securite" },
-      { label: "Support & Maintenance", href: "/maintenance" },
+      { label: "Portfolio", href: "/portfolio" },
+      { label: "Blog", href: "/blog" },
+      { label: "FAQ", href: "/#faq" },
+      { label: "Carrières", href: "/carrieres" },
     ],
   },
   {
     title: "Légal",
     links: [
-      { label: "Mentions légales", href: "/contact" },
-      { label: "Politique de confidentialité", href: "/contact" },
-      { label: "Conditions générales", href: "/contact" },
+      { label: "Mentions légales", href: "/mentions-legales" },
+      { label: "Politique de confidentialité", href: "/confidentialite" },
+      { label: "CGU", href: "/cgu" },
     ],
   },
 ];
@@ -34,7 +36,7 @@ export function Footer() {
   return (
     <footer className="relative border-t bg-slate-50 dark:bg-night-950">
       <div className="container py-16">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2.5">
               <img
@@ -118,7 +120,21 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t pt-8 text-xs text-slate-500 dark:text-slate md:flex-row">
+        <div className="mt-14 border-t pt-10">
+          <div className="mx-auto max-w-md text-center">
+            <h4 className="text-sm font-semibold text-night-900 dark:text-white">
+              Recevez nos conseils IT
+            </h4>
+            <p className="mt-1.5 text-sm text-slate-600 dark:text-slate">
+              Un email occasionnel, pas de spam.
+            </p>
+            <div className="mt-4">
+              <NewsletterForm />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-8 text-xs text-slate-500 dark:text-slate md:flex-row">
           <p>© {new Date().getFullYear()} VisionTech — CUSTOM IT. Tous droits réservés.</p>
           <p>Conçu avec précision à Casablanca</p>
         </div>

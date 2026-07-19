@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Maintenance",
   description:
     "Comparez nos contrats de maintenance informatique : Essentiel, Business et Premium. Support réactif, supervision proactive et interventions sur site à Casablanca.",
+  alternates: { canonical: "/maintenance" },
 };
 
 type PlanRow = {

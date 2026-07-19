@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, SlidersHorizontal, X, Flame, RotateCcw } from "lucide-react";
 import {
   products,
@@ -34,6 +34,7 @@ const STOCK_OPTIONS: StockStatus[] = ["in-stock", "limited", "on-order"];
 
 const PRICE_MIN = 0;
 const PRICE_MAX = 70000;
+const PAGE_SIZE = 8;
 
 export default function BoutiquePage() {
   const [query, setQuery] = useState("");
@@ -43,6 +44,7 @@ export default function BoutiquePage() {
   const [priceRange, setPriceRange] = useState<[number, number]>([PRICE_MIN, PRICE_MAX]);
   const [availability, setAvailability] = useState<StockStatus[]>([]);
   const [promoOnly, setPromoOnly] = useState(false);
+  const [page, setPage] = useState(1);
 
   const featured = useMemo(() => products.filter((p) => p.featured), []);
   const showFeatured = query === "" && activeCategory === "Tous";
@@ -63,6 +65,7 @@ export default function BoutiquePage() {
     setPriceRange([PRICE_MIN, PRICE_MAX]);
     setAvailability([]);
     setPromoOnly(false);
+    setPage(1);
   }
 
   function toggleAvailability(status: StockStatus) {
@@ -104,6 +107,13 @@ export default function BoutiquePage() {
     }
     return list;
   }, [query, activeCategory, sort, priceRange, availability, promoOnly]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, activeCategory, sort, priceRange, availability, promoOnly]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div>
@@ -309,13 +319,36 @@ export default function BoutiquePage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {filtered.map((product, i) => (
-                  <Reveal key={product.id} delay={Math.min(i, 6) * 0.05}>
-                    <ProductCard product={product} />
-                  </Reveal>
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                  {paginated.map((product, i) => (
+                    <Reveal key={product.id} delay={Math.min(i, 6) * 0.05}>
+                      <ProductCard product={product} />
+                    </Reveal>
+                  ))}
+                </div>
+
+                {totalPages > 1 && (
+                  <div className="mt-10 flex items-center justify-center gap-2">
+                    {Array.from({ length: totalPages }).map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setPage(i + 1)}
+                        aria-label={`Page ${i + 1}`}
+                        aria-current={page === i + 1 ? "page" : undefined}
+                        className={cn(
+                          "flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition-colors",
+                          page === i + 1
+                            ? "bg-electric-500 text-white"
+                            : "text-slate-600 hover:bg-slate-900/[0.06] dark:text-slate dark:hover:bg-white/[0.06]"
+                        )}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Reveal } from "@/components/motion/reveal";
 import { CtaSection } from "@/components/sections/cta-section";
+import { ServicesGrid } from "@/components/sections/services-grid";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
   title: "Services",
   description:
     "Infrastructure IT, Cloud & Hybride, Cybersécurité et Support & Maintenance : découvrez l'ensemble des services VisionTech — CUSTOM IT à Casablanca.",
+  alternates: { canonical: "/services" },
 };
 
 const SERVICE_DETAILS = [
@@ -114,6 +116,8 @@ export default function ServicesPage() {
           </Reveal>
         </div>
       </section>
+
+      <ServicesGrid />
 
       {SERVICE_DETAILS.map((service, i) => (
         <section
