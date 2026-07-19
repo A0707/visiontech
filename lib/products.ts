@@ -15,6 +15,12 @@ export const STOCK_LABELS: Record<StockStatus, string> = {
 
 export type ProductBadge = "Nouveau" | "Populaire" | "Meilleure vente" | "Stock limité";
 
+/** Ligne de spécification technique affichée sur la fiche produit. */
+export interface ProductSpec {
+  label: string;
+  value: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -25,6 +31,10 @@ export interface Product {
   reviews: number;
   sales: number;
   stock: StockStatus;
+  /** Spécifications techniques détaillées (fiche produit). */
+  specs?: ProductSpec[];
+  /** Prix de la prestation d'installation et configuration par VisionTech. */
+  installationPrice?: number;
   /** Badge affiché en coin de carte. Ignoré si oldPrice est défini (la remise prime). */
   badge?: ProductBadge;
   /** Marque le produit pour la rangée "Offres du moment" en haut de la boutique. */
@@ -49,6 +59,15 @@ export const products: Product[] = [
     featured: true,
     promoHours: 52,
     description: "Pare-feu nouvelle génération avec IPS, VPN site-à-site et filtrage applicatif.",
+    installationPrice: 3500,
+    specs: [
+      { label: "Débit pare-feu", value: "10 Gbps" },
+      { label: "Débit IPS", value: "3,5 Gbps" },
+      { label: "Sessions simultanées", value: "2 000 000" },
+      { label: "Tunnels VPN IPSec", value: "500" },
+      { label: "Interfaces", value: "8 × RJ45 GbE, 2 × SFP+" },
+      { label: "Garantie", value: "3 ans retour atelier" },
+    ],
     image: "firewall",
   },
   {
@@ -62,6 +81,15 @@ export const products: Product[] = [
     stock: "on-order",
     badge: "Populaire",
     description: "Serveur rack 2U double Xeon Silver, 128 Go RAM, idéal pour virtualisation.",
+    installationPrice: 6500,
+    specs: [
+      { label: "Format", value: "Rack 2U" },
+      { label: "Processeurs", value: "2 × Intel Xeon Silver 4210R (10 cœurs)" },
+      { label: "Mémoire", value: "128 Go DDR4 ECC (extensible 1 To)" },
+      { label: "Stockage", value: "4 × 960 Go SSD SAS — RAID 10" },
+      { label: "Alimentation", value: "2 × 750W redondantes hot-plug" },
+      { label: "Garantie", value: "3 ans sur site J+1" },
+    ],
     image: "server",
   },
   {
@@ -76,6 +104,15 @@ export const products: Product[] = [
     stock: "in-stock",
     featured: true,
     description: "Switch niveau 2/3, PoE+ 370W, agrégation de liens, VLAN et QoS.",
+    installationPrice: 1800,
+    specs: [
+      { label: "Ports", value: "24 × RJ45 GbE PoE+, 4 × SFP+" },
+      { label: "Budget PoE", value: "370 W" },
+      { label: "Capacité de commutation", value: "128 Gbps" },
+      { label: "Fonctions", value: "VLAN 802.1Q, LACP, QoS, IGMP snooping" },
+      { label: "Administration", value: "Web, CLI, SNMP v3" },
+      { label: "Garantie", value: "Garantie à vie limitée" },
+    ],
     image: "switch",
   },
   {
@@ -89,6 +126,15 @@ export const products: Product[] = [
     stock: "in-stock",
     badge: "Nouveau",
     description: "Couverture haute densité, gestion centralisée cloud, jusqu'à 2.4 Gbps.",
+    installationPrice: 900,
+    specs: [
+      { label: "Norme", value: "Wi-Fi 6 (802.11ax)" },
+      { label: "Débit théorique", value: "2,4 Gbps (2×2 MU-MIMO)" },
+      { label: "Clients simultanés", value: "512" },
+      { label: "Alimentation", value: "PoE+ 802.3at" },
+      { label: "Sécurité", value: "WPA3, 802.1X, portail captif" },
+      { label: "Garantie", value: "2 ans" },
+    ],
     image: "wifi",
   },
   {
@@ -102,6 +148,15 @@ export const products: Product[] = [
     stock: "limited",
     badge: "Stock limité",
     description: "Stockage RAID redondant, sauvegarde automatisée, snapshot et réplication.",
+    installationPrice: 2900,
+    specs: [
+      { label: "Baies", value: "8 × 3,5\" hot-swap" },
+      { label: "Capacité fournie", value: "32 To bruts (8 × 4 To)" },
+      { label: "RAID", value: "0/1/5/6/10, SHR" },
+      { label: "Réseau", value: "4 × RJ45 GbE (agrégation)" },
+      { label: "Fonctions", value: "Snapshots, réplication, chiffrement AES-256" },
+      { label: "Garantie", value: "3 ans" },
+    ],
     image: "nas",
   },
   {
@@ -115,6 +170,15 @@ export const products: Product[] = [
     stock: "in-stock",
     badge: "Meilleure vente",
     description: "Détection et réponse aux menaces en temps réel avec IA comportementale.",
+    installationPrice: 4500,
+    specs: [
+      { label: "Postes couverts", value: "50" },
+      { label: "Durée", value: "12 mois" },
+      { label: "Plateformes", value: "Windows, macOS, Linux" },
+      { label: "Détection", value: "Comportementale + signatures + IA" },
+      { label: "Console", value: "Cloud centralisée, rapports automatisés" },
+      { label: "Support éditeur", value: "24/7 inclus" },
+    ],
     image: "shield",
   },
   {
@@ -127,6 +191,15 @@ export const products: Product[] = [
     sales: 37,
     stock: "in-stock",
     description: "Protection électrique en ligne double conversion pour infrastructures critiques.",
+    installationPrice: 1500,
+    specs: [
+      { label: "Puissance", value: "3000 VA / 2700 W" },
+      { label: "Technologie", value: "Online double conversion" },
+      { label: "Format", value: "Rack 2U" },
+      { label: "Autonomie", value: "~8 min à pleine charge" },
+      { label: "Sorties", value: "8 × IEC C13, 1 × IEC C19" },
+      { label: "Garantie", value: "2 ans (batteries incluses)" },
+    ],
     image: "ups",
   },
   {
@@ -141,6 +214,15 @@ export const products: Product[] = [
     stock: "in-stock",
     featured: true,
     description: "Ultrabook professionnel, chiffrement TPM 2.0, autonomie 14h.",
+    installationPrice: 800,
+    specs: [
+      { label: "Écran", value: "14\" WUXGA IPS antireflet" },
+      { label: "Processeur", value: "Intel Core i7 (12 cœurs)" },
+      { label: "Mémoire", value: "32 Go LPDDR5" },
+      { label: "Stockage", value: "1 To SSD NVMe" },
+      { label: "Sécurité", value: "TPM 2.0, lecteur d'empreinte, obturateur webcam" },
+      { label: "Garantie", value: "3 ans sur site" },
+    ],
     image: "laptop",
   },
   {
@@ -153,6 +235,15 @@ export const products: Product[] = [
     sales: 312,
     stock: "in-stock",
     description: "Sauvegarde chiffrée automatisée hébergée localement au Maroc, conforme RGPD.",
+    installationPrice: 1200,
+    specs: [
+      { label: "Capacité", value: "1 To" },
+      { label: "Durée", value: "12 mois" },
+      { label: "Hébergement", value: "Datacenter au Maroc" },
+      { label: "Chiffrement", value: "AES-256 de bout en bout" },
+      { label: "Rétention", value: "30 jours de versions" },
+      { label: "Restauration", value: "Illimitée, sans frais de sortie" },
+    ],
     image: "cloud",
   },
   {
@@ -166,6 +257,15 @@ export const products: Product[] = [
     stock: "on-order",
     badge: "Nouveau",
     description: "Interconnexion sécurisée multi-sites avec routage intelligent applicatif.",
+    installationPrice: 5500,
+    specs: [
+      { label: "Débit VPN", value: "2 Gbps IPSec" },
+      { label: "Sites interconnectables", value: "Jusqu'à 64" },
+      { label: "Routage", value: "SD-WAN applicatif, basculement automatique" },
+      { label: "Interfaces", value: "4 × RJ45 GbE, 2 × SFP" },
+      { label: "Administration", value: "Console cloud centralisée" },
+      { label: "Garantie", value: "3 ans" },
+    ],
     image: "vpn",
   },
   {
@@ -178,6 +278,15 @@ export const products: Product[] = [
     sales: 9,
     stock: "on-order",
     description: "Commutateur cœur de réseau haute performance pour datacenters.",
+    installationPrice: 7500,
+    specs: [
+      { label: "Ports", value: "48 × SFP+ 10G, 4 × QSFP+ 40G" },
+      { label: "Capacité de commutation", value: "1,44 Tbps" },
+      { label: "Latence", value: "< 1 µs" },
+      { label: "Fonctions", value: "Stacking, MLAG, routage L3 dynamique" },
+      { label: "Alimentation", value: "2 × PSU redondantes hot-swap" },
+      { label: "Garantie", value: "5 ans" },
+    ],
     image: "switch",
   },
   {
@@ -191,6 +300,15 @@ export const products: Product[] = [
     stock: "in-stock",
     badge: "Populaire",
     description: "Centralisation des logs, corrélation d'événements et alerting SOC 24/7.",
+    installationPrice: 12000,
+    specs: [
+      { label: "Durée", value: "12 mois" },
+      { label: "Sources de logs", value: "Jusqu'à 100 équipements" },
+      { label: "Rétention", value: "12 mois consultables" },
+      { label: "Corrélation", value: "Règles personnalisées + détection d'anomalies" },
+      { label: "Alerting", value: "Email, SMS, webhook — 24/7" },
+      { label: "Rapports", value: "Mensuels + conformité sur demande" },
+    ],
     image: "siem",
   },
 ];

@@ -1,181 +1,195 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { CheckCircle2, Loader2, Send } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
+import { contactSchema, NEED_TYPES, type ContactFormValues } from "@/lib/schemas/contact";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  company: string;
-  subject: string;
-  message: string;
-}
-
-const SUBJECTS = [
-  "Demande de devis",
-  "Support technique",
-  "Question sur nos services",
-  "Partenariat",
-  "Autre",
-];
-
-const initialData: FormData = {
-  name: "",
-  email: "",
-  phone: "",
-  company: "",
-  subject: SUBJECTS[0],
-  message: "",
-};
-
-type Errors = Partial<Record<keyof FormData, string>>;
-
-function validate(data: FormData): Errors {
-  const errors: Errors = {};
-  if (!data.name.trim() || data.name.trim().length < 2) {
-    errors.name = "Merci d'indiquer votre nom complet.";
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-    errors.email = "Adresse email invalide.";
-  }
-  if (data.phone && !/^[\d+\s().-]{8,}$/.test(data.phone)) {
-    errors.phone = "Numéro de téléphone invalide.";
-  }
-  if (!data.message.trim() || data.message.trim().length < 10) {
-    errors.message = "Votre message doit contenir au moins 10 caractères.";
-  }
-  return errors;
-}
+type Status = "idle" | "success";
 
 export function ContactForm() {
-  const [data, setData] = useState<FormData>(initialData);
-  const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [status, setStatus] = useState<Status>("idle");
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  function handleChange<K extends keyof FormData>(key: K, value: FormData[K]) {
-    setData((d) => ({ ...d, [key]: value }));
-    if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
-  }
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    mode: "onBlur",
+    defaultValues: {
+      name: "",
+      company: "",
+      email: "",
+      phone: "",
+      needType: NEED_TYPES[0],
+      message: "",
+      website: "",
+    },
+  });
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    const validation = validate(data);
-    setErrors(validation);
-    if (Object.keys(validation).length > 0) return;
+  async function onSubmit(values: ContactFormValues) {
+    setServerError(null);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
 
-    setStatus("submitting");
-    // Simulation d'envoi — à remplacer par un appel API réel (ex: /api/contact)
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-    setStatus("success");
-    setData(initialData);
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setServerError(result.error ?? "L'envoi a échoué. Merci de réessayer.");
+        return;
+      }
+
+      setStatus("success");
+      reset();
+    } catch {
+      setServerError(
+        "Impossible de joindre le serveur. Vérifiez votre connexion ou contactez-nous par téléphone."
+      );
+    }
   }
 
   if (status === "success") {
     return (
       <div className="glass-card flex flex-col items-center gap-3 p-10 text-center">
         <CheckCircle2 className="h-12 w-12 text-emerald-500 dark:text-emerald-400" />
-        <h3 className="text-xl font-bold text-night-900 dark:text-white">Message envoyé avec succès</h3>
+        <h3 className="text-xl font-bold text-night-900 dark:text-white">
+          Demande envoyée avec succès
+        </h3>
         <p className="max-w-sm text-sm text-slate-600 dark:text-slate">
           Merci de nous avoir contactés. Un expert VisionTech reviendra vers vous sous
           24h ouvrées.
         </p>
         <Button variant="outline" size="sm" className="mt-2" onClick={() => setStatus("idle")}>
-          Envoyer un autre message
+          Envoyer une autre demande
         </Button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="glass-card space-y-5 p-7 sm:p-8" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="glass-card space-y-5 p-7 sm:p-8" noValidate>
+      {/* Piège anti-spam : invisible et hors du parcours clavier. */}
+      <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="website">Ne pas remplir</label>
+        <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+      </div>
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <Label htmlFor="name">Nom complet *</Label>
           <Input
             id="name"
-            value={data.name}
-            onChange={(e) => handleChange("name", e.target.value)}
             placeholder="Votre nom"
-            error={errors.name}
-          />
-        </div>
-        <div>
-          <Label htmlFor="email">Email professionnel *</Label>
-          <Input
-            id="email"
-            type="email"
-            value={data.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-            placeholder="vous@entreprise.ma"
-            error={errors.email}
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div>
-          <Label htmlFor="phone">Téléphone</Label>
-          <Input
-            id="phone"
-            type="tel"
-            value={data.phone}
-            onChange={(e) => handleChange("phone", e.target.value)}
-            placeholder="+212 6 00 00 00 00"
-            error={errors.phone}
+            aria-invalid={!!errors.name}
+            error={errors.name?.message}
+            {...register("name")}
           />
         </div>
         <div>
           <Label htmlFor="company">Entreprise</Label>
           <Input
             id="company"
-            value={data.company}
-            onChange={(e) => handleChange("company", e.target.value)}
             placeholder="Nom de votre entreprise"
+            aria-invalid={!!errors.company}
+            error={errors.company?.message}
+            {...register("company")}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <Label htmlFor="email">Email professionnel *</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="vous@entreprise.ma"
+            aria-invalid={!!errors.email}
+            error={errors.email?.message}
+            {...register("email")}
+          />
+        </div>
+        <div>
+          <Label htmlFor="phone">Téléphone</Label>
+          <Input
+            id="phone"
+            type="tel"
+            placeholder="+212 6 00 00 00 00"
+            aria-invalid={!!errors.phone}
+            error={errors.phone?.message}
+            {...register("phone")}
           />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="subject">Sujet</Label>
+        <Label htmlFor="needType">Type de besoin *</Label>
         <select
-          id="subject"
-          value={data.subject}
-          onChange={(e) => handleChange("subject", e.target.value)}
-          className="flex h-12 w-full rounded-xl border border-slate-900/10 bg-slate-900/[0.03] px-4 text-sm text-night-900 outline-none transition-colors focus:border-electric-500 dark:border-white/10 dark:bg-white/[0.03] dark:text-white"
+          id="needType"
+          aria-invalid={!!errors.needType}
+          className={cn(
+            "flex h-12 w-full rounded-xl border bg-slate-900/[0.03] px-4 text-sm text-night-900 outline-none transition-colors focus:border-electric-500 dark:bg-white/[0.03] dark:text-white",
+            errors.needType ? "border-red-500/60" : "border-slate-900/10 dark:border-white/10"
+          )}
+          {...register("needType")}
         >
-          {SUBJECTS.map((s) => (
-            <option key={s} value={s} className="bg-white text-night-900 dark:bg-night-800 dark:text-white">
-              {s}
+          {NEED_TYPES.map((type) => (
+            <option
+              key={type}
+              value={type}
+              className="bg-white text-night-900 dark:bg-night-800 dark:text-white"
+            >
+              {type}
             </option>
           ))}
         </select>
+        {errors.needType && (
+          <p className="mt-1.5 text-xs text-red-400">{errors.needType.message}</p>
+        )}
       </div>
 
       <div>
         <Label htmlFor="message">Message *</Label>
         <Textarea
           id="message"
-          value={data.message}
-          onChange={(e) => handleChange("message", e.target.value)}
           placeholder="Décrivez votre besoin ou votre projet..."
-          error={errors.message}
+          aria-invalid={!!errors.message}
+          error={errors.message?.message}
+          {...register("message")}
         />
       </div>
+
+      {serverError && (
+        <div
+          role="alert"
+          className="flex items-start gap-2.5 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400"
+        >
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <p>{serverError}</p>
+        </div>
+      )}
 
       <Button
         type="submit"
         variant="primary"
         size="lg"
-        className={cn("w-full", status === "submitting" && "opacity-70")}
-        disabled={status === "submitting"}
+        className={cn("w-full", isSubmitting && "opacity-70")}
+        disabled={isSubmitting}
       >
-        {status === "submitting" ? (
+        {isSubmitting ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
             Envoi en cours...
